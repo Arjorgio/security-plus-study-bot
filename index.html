@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security+ 701 Study Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+
+        .question-type {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .option:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .option.selected {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .option.correct {
+            border-color: #27ae60;
+            background: #d4edda;
+        }
+
+        .option.incorrect {
+            border-color: #e74c3c;
+            background: #f8d7da;
+        }
+
+        .pbq-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.3);
+        }
+
+        .feedback {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 5px solid #17a2b8;
+        }
+
+        .hint {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 5px solid #f39c12;
+        }
+
+        .hint h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .hint p {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .feedback h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .feedback p {
+            line-height: 1.6;
+            color: #5a6c7d;
+        }
+
+        .domain-selector {
+            margin-bottom: 30px;
+        }
+
+        .mode-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .mode-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .mode-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .flashcard {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border-left: 5px solid #e74c3c;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-5px);
+        }
+
+        .flashcard-front {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .flashcard-back {
+            display: none;
+        }
+
+        .flashcard-back h3 {
+            font-size: 1.8em;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .flashcard-back p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #5a6c7d;
+        }
+
+        .flashcard.flipped .flashcard-front {
+            display: none;
+        }
+
+        .flashcard.flipped .flashcard-back {
+            display: block;
+        }
+
+        .domain-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .domain-btn {
+            padding: 8px 16px;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .domain-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Security+ 701 Study Bot</h1>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="totalQuestions">0</div>
+                    <div class="stat-label">Questions</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="correctAnswers">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="mode-selector">
+                <h3>Select Study Mode:</h3>
+                <div class="mode-buttons">
+                    <button class="mode-btn active" data-mode="quiz">📝 Quiz Mode</button>
+                    <button class="mode-btn" data-mode="flashcards">🃏 Flashcards</button>
+                </div>
+            </div>
+
+            <div id="quizMode">
+                <div class="domain-selector">
+                    <h3>Select Study Domain:</h3>
+                    <div class="domain-buttons">
+                        <button class="domain-btn active" data-domain="all">All Domains</button>
+                        <button class="domain-btn" data-domain="attacks">Attacks & Threats</button>
+                        <button class="domain-btn" data-domain="architecture">Architecture & Design</button>
+                        <button class="domain-btn" data-domain="implementation">Implementation</button>
+                        <button class="domain-btn" data-domain="operations">Operations & Response</button>
+                        <button class="domain-btn" data-domain="governance">Governance & Risk</button>
+                    </div>
+                </div>
+
+                <div class="question-card" id="questionCard">
+                    <div class="question-type" id="questionType">Multiple Choice</div>
+                    <div class="question-text" id="questionText">
+                        Welcome to your Security+ 701 study session! Click "Start Quiz" to begin.
+                    </div>
+                    <div class="options" id="optionsContainer" style="display: none;"></div>
+                    <textarea class="pbq-input" id="pbqInput" placeholder="Enter your answer here..." style="display: none;"></textarea>
+                    <div class="buttons">
+                        <button class="btn btn-primary" id="startBtn">Start Quiz</button>
+                        <button class="btn btn-primary" id="submitBtn" style="display: none;">Submit Answer</button>
+                        <button class="btn btn-secondary" id="hintBtn" style="display: none;">💡 Get Hint</button>
+                        <button class="btn btn-secondary" id="nextBtn" style="display: none;">Next Question</button>
+                        <button class="btn btn-secondary" id="resetBtn" style="display: none;">Reset Stats</button>
+                    </div>
+                    <div class="feedback" id="feedback" style="display: none;"></div>
+                    <div class="hint" id="hint" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div id="flashcardMode" style="display: none;">
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-front" id="flashcardFront">
+                        Click "Start Flashcards" to begin!
+                    </div>
+                    <div class="flashcard-back" id="flashcardBack">
+                        <h3 id="flashcardTerm"></h3>
+                        <p id="flashcardDefinition"></p>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-primary" id="startFlashcardsBtn">Start Flashcards</button>
+                    <button class="btn btn-secondary" id="flipBtn" style="display: none;">🔄 Flip Card</button>
+                    <button class="btn btn-secondary" id="nextFlashcardBtn" style="display: none;">Next Card</button>
+                    <button class="btn btn-secondary" id="shuffleBtn" style="display: none;">🔀 Shuffle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SecurityPlusBot {
+            constructor() {
+                this.currentQuestion = null;
+                this.selectedAnswer = null;
+                this.hintUsed = false;
+                this.currentMode = 'quiz';
+                this.currentFlashcard = null;
+                this.flashcardIndex = 0;
+                this.shuffledFlashcards = [];
+                this.stats = {
+                    total: 0,
+                    correct: 0,
+                    accuracy: 0
+                };
+                this.selectedDomain = 'all';
+                this.initializeQuestions();
+                this.initializeFlashcards();
+                this.bindEvents();
+                this.updateStats();
+            }
+
+            initializeQuestions() {
+                this.questions = [
+                    // Attacks, Threats, and Vulnerabilities
+                    {
+                        type: 'mc',
+                        domain: 'attacks',
+                        question: 'Which of the following is a characteristic of a polymorphic virus?',
+                        options: [
+                            'It can only infect executable files',
+                            'It changes its code signature to avoid detection',
+                            'It requires user interaction to spread',
+                            'It can only spread through email attachments'
+                        ],
+                        correct: 1,
+                        hint: 'Think about what makes this type of virus difficult for antivirus software to detect. The key is in the name - "polymorphic" means changing form.',
+                        explanation: 'Polymorphic viruses change their code signature or structure while maintaining their functionality, making them harder to detect by traditional signature-based antivirus software.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'attacks',
+                        question: 'What type of attack involves overwhelming a system with traffic to make it unavailable?',
+                        options: [
+                            'SQL Injection',
+                            'Cross-Site Scripting (XSS)',
+                            'Distributed Denial of Service (DDoS)',
+                            'Man-in-the-Middle'
+                        ],
+                        correct: 2,
+                        hint: 'This attack focuses on availability rather than confidentiality or integrity. Look for the option that involves overwhelming system resources.',
+                        explanation: 'A DDoS attack floods a target system with traffic from multiple sources, overwhelming its resources and making it unavailable to legitimate users.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'attacks',
+                        question: 'Which attack type involves injecting malicious SQL commands into a database query?',
+                        options: [
+                            'Cross-Site Scripting (XSS)',
+                            'SQL Injection',
+                            'Buffer Overflow',
+                            'Command Injection'
+                        ],
+                        correct: 1,
+                        hint: 'The attack name literally contains the technology being exploited - a database query language.',
+                        explanation: 'SQL injection attacks insert malicious SQL commands into application queries, potentially allowing attackers to view, modify, or delete database data.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'attacks',
+                        question: 'What is the primary goal of a phishing attack?',
+                        options: [
+                            'To overwhelm server resources',
+                            'To steal credentials or personal information',
+                            'To gain physical access to facilities',
+                            'To corrupt system files'
+                        ],
+                        correct: 1,
+                        hint: 'Phishing attacks typically involve deception to trick users into revealing something valuable.',
+                        explanation: 'Phishing attacks use social engineering to deceive users into revealing credentials, personal information, or financial data.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'attacks',
+                        question: 'Which malware type can replicate itself across network connections without user intervention?',
+                        options: [
+                            'Virus',
+                            'Trojan',
+                            'Worm',
+                            'Rootkit'
+                        ],
+                        correct: 2,
+                        hint: 'This type of malware is named after a creature that moves through the earth independently.',
+                        explanation: 'Worms can self-replicate and spread across networks without requiring user interaction or host files.'
+                    },
+                    {
+                        type: 'pbq',
+                        domain: 'attacks',
+                        question: 'You discover suspicious network traffic showing repeated failed login attempts from multiple IP addresses targeting your web server. Describe three immediate steps you would take to mitigate this attack and explain why each step is important.',
+                        answer: 'This appears to be a brute force attack. Three immediate steps: 1) Implement account lockout policies to prevent repeated attempts, 2) Enable rate limiting on login endpoints to slow down attacks, 3) Monitor and block suspicious IP addresses using firewall rules or IPS.',
+                        hint: 'Consider what type of attack this is based on the repeated failed logins. Think about: blocking the source, slowing down attempts, and protecting accounts.',
+                        explanation: 'This scenario describes a distributed brute force attack. Key mitigation strategies include account lockouts, rate limiting, IP blocking, and monitoring.'
+                    },
+
+                    // Architecture and Design
+                    {
+                        type: 'mc',
+                        domain: 'architecture',
+                        question: 'Which security model follows the principle of "never trust, always verify"?',
+                        options: [
+                            'Defense in Depth',
+                            'Zero Trust',
+                            'Least Privilege',
+                            'Security by Obscurity'
+                        ],
+                        correct: 1,
+                        hint: 'This security model assumes that no user or device can be trusted by default, regardless of their location or previous authentication.',
+                        explanation: 'Zero Trust security model operates on the principle of "never trust, always verify," requiring verification for every user and device before granting access to resources.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'architecture',
+                        question: 'What is the primary purpose of network segmentation?',
+                        options: [
+                            'To increase network speed',
+                            'To reduce hardware costs',
+                            'To limit the scope of security breaches',
+                            'To simplify network management'
+                        ],
+                        correct: 2,
+                        hint: 'Think about containment - what happens when you divide something into smaller parts and a problem occurs in one part?',
+                        explanation: 'Network segmentation divides a network into smaller segments to limit the scope of security breaches, containing threats and reducing the potential impact of attacks.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'architecture',
+                        question: 'What is the purpose of a DMZ in network architecture?',
+                        options: [
+                            'To provide wireless access',
+                            'To isolate public-facing services from internal networks',
+                            'To increase network bandwidth',
+                            'To reduce network latency'
+                        ],
+                        correct: 1,
+                        hint: 'DMZ stands for Demilitarized Zone - think about creating a buffer area between trusted and untrusted networks.',
+                        explanation: 'A DMZ isolates public-facing services from internal networks, providing a buffer zone between the internet and internal resources.'
+                    },
+                    {
+                        type: 'pbq',
+                        domain: 'architecture',
+                        question: 'Design a secure network architecture for a small company with 50 employees. Include at least 4 security zones and explain the purpose of each zone.',
+                        answer: 'Secure network zones: 1) DMZ for public-facing servers (web, email), 2) Internal LAN for employee workstations with VLANs by department, 3) Server VLAN for internal servers with restricted access, 4) Management VLAN for network infrastructure devices, 5) Guest network isolated from internal resources.',
+                        hint: 'Think about different trust levels: public-facing services, internal users, critical servers, network equipment, and visitors. Each needs different access controls.',
+                        explanation: 'Proper network segmentation includes multiple security zones with different trust levels and access controls to minimize attack surface and contain potential breaches.'
+                    },
+
+                    // Implementation
+                    {
+                        type: 'mc',
+                        domain: 'implementation',
+                        question: 'Which cryptographic algorithm is considered secure for current use?',
+                        options: [
+                            'DES',
+                            'MD5',
+                            'AES-256',
+                            'SHA-1'
+                        ],
+                        correct: 2,
+                        hint: 'Look for the algorithm that is both modern and uses a large key size. Avoid algorithms from the 1990s or those known to be compromised.',
+                        explanation: 'AES-256 (Advanced Encryption Standard with 256-bit key) is currently considered secure and is widely used. DES, MD5, and SHA-1 are considered cryptographically broken or weak.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'implementation',
+                        question: 'What is the primary difference between symmetric and asymmetric encryption?',
+                        options: [
+                            'Symmetric is faster than asymmetric',
+                            'Symmetric uses the same key for encryption and decryption',
+                            'Asymmetric provides better security',
+                            'Symmetric requires a certificate authority'
+                        ],
+                        correct: 1,
+                        hint: 'Focus on the key management aspect - how many keys are involved in each type of encryption?',
+                        explanation: 'Symmetric encryption uses the same key for both encryption and decryption, while asymmetric encryption uses different keys (public and private key pairs).'
+                    },
+                    {
+                        type: 'pbq',
+                        domain: 'implementation',
+                        question: 'Configure a secure password policy for a corporate environment. List 5 specific requirements and explain the security benefit of each.',
+                        answer: '1) Minimum 12 characters (increases complexity), 2) Mix of uppercase, lowercase, numbers, symbols (prevents dictionary attacks), 3) No reuse of last 12 passwords (prevents password cycling), 4) 90-day expiration (limits exposure time), 5) Account lockout after 5 failed attempts (prevents brute force).',
+                        hint: 'Consider: length, complexity, history, expiration, and protection against brute force attacks. Each requirement should address a specific threat.',
+                        explanation: 'Strong password policies combine multiple requirements to make passwords difficult to guess or crack while balancing security with usability.'
+                    },
+
+                    // Operations and Incident Response
+                    {
+                        type: 'mc',
+                        domain: 'operations',
+                        question: 'What is the first phase of incident response according to NIST guidelines?',
+                        options: [
+                            'Detection and Analysis',
+                            'Containment, Eradication, and Recovery',
+                            'Preparation',
+                            'Post-Incident Activity'
+                        ],
+                        correct: 2,
+                        hint: 'Think about what must be done before an incident occurs. What groundwork needs to be laid?',
+                        explanation: 'According to NIST SP 800-61, the first phase of incident response is Preparation, which involves establishing policies, procedures, and capabilities before an incident occurs.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'operations',
+                        question: 'Which log type would be MOST useful for investigating a suspected data exfiltration?',
+                        options: [
+                            'System logs',
+                            'Application logs',
+                            'Network flow logs',
+                            'Authentication logs'
+                        ],
+                        correct: 2,
+                        hint: 'Data exfiltration involves moving data out of the network. Which type of log would show patterns of data movement and traffic flows?',
+                        explanation: 'Network flow logs show data movement patterns and can reveal unusual outbound traffic that might indicate data exfiltration attempts.'
+                    },
+                    {
+                        type: 'pbq',
+                        domain: 'operations',
+                        question: 'A critical server has been compromised. Walk through the incident response steps you would take in the first 30 minutes after discovery.',
+                        answer: '1) Document discovery time and initial observations, 2) Isolate the compromised server from the network, 3) Notify incident response team and management, 4) Preserve system state and create forensic images, 5) Begin damage assessment and identify affected systems, 6) Activate communication plan for stakeholders.',
+                        hint: 'Think about the incident response phases: document everything, contain the threat, notify key people, preserve evidence, and assess the scope.',
+                        explanation: 'Immediate incident response focuses on containment, preservation of evidence, communication, and damage assessment while following established procedures.'
+                    },
+
+                    // Governance, Risk, and Compliance
+                    {
+                        type: 'mc',
+                        domain: 'governance',
+                        question: 'Which framework provides guidelines for IT governance and management?',
+                        options: [
+                            'NIST Cybersecurity Framework',
+                            'COBIT',
+                            'ISO 27001',
+                            'OWASP Top 10'
+                        ],
+                        correct: 1,
+                        hint: 'Look for the framework specifically designed for IT governance and management, not just cybersecurity or application security.',
+                        explanation: 'COBIT (Control Objectives for Information and Related Technologies) is a framework specifically designed for IT governance and management of enterprise IT.'
+                    },
+                    {
+                        type: 'mc',
+                        domain: 'governance',
+                        question: 'What is the primary purpose of a Business Impact Analysis (BIA)?',
+                        options: [
+                            'To identify security vulnerabilities',
+                            'To calculate the cost of security controls',
+                            'To determine the impact of business disruptions',
+                            'To assess compliance requirements'
+                        ],
+                        correct: 2,
+                        hint: 'The key word is "Impact" - this analysis focuses on what happens when business operations are disrupted or stopped.',
+                        explanation: 'A Business Impact Analysis identifies and evaluates the potential effects of business disruptions, helping organizations prioritize recovery efforts and resource allocation.'
+                    },
+                    {
+                        type: 'pbq',
+                        domain: 'governance',
+                        question: 'Perform a qualitative risk assessment for a company moving to cloud storage. Identify 3 risks, assign likelihood and impact ratings (High/Medium/Low), and suggest mitigation strategies.',
+                        answer: 'Risk 1: Data breach - Likelihood: Medium, Impact: High, Mitigation: Encryption, access controls. Risk 2: Service outage - Likelihood: Low, Impact: High, Mitigation: Multi-cloud strategy, backups. Risk 3: Compliance violations - Likelihood: Medium, Impact: Medium, Mitigation: Due diligence, compliance monitoring.',
+                        hint: 'Consider risks specific to cloud adoption: data security, service availability, and regulatory compliance. Think about what could go wrong and how likely each scenario is.',
+                        explanation: 'Qualitative risk assessment evaluates risks using descriptive scales and helps prioritize security investments based on business impact and likelihood.'
+                    }
+                ];
+            }
+
+            initializeFlashcards() {
+                this.flashcards = [
+                    // Core Security Acronyms
+                    { term: 'AES', definition: 'Advanced Encryption Standard - Symmetric encryption algorithm' },
+                    { term: 'API', definition: 'Application Programming Interface - Set of protocols for building software applications' },
+                    { term: 'APT', definition: 'Advanced Persistent Threat - Long-term targeted cyberattack' },
+                    { term: 'BCP', definition: 'Business Continuity Plan - Strategy to maintain operations during disruptions' },
+                    { term: 'BIA', definition: 'Business Impact Analysis - Assessment of disruption effects on operations' },
+                    { term: 'CA', definition: 'Certificate Authority - Entity that issues digital certificates' },
+                    { term: 'CASB', definition: 'Cloud Access Security Broker - Security enforcement point between cloud users and providers' },
+                    { term: 'CCMP', definition: 'Counter Mode with Cipher Block Chaining Message Authentication Code Protocol - WPA2 encryption protocol' },
+                    { term: 'CCTV', definition: 'Closed Circuit Television - Video surveillance system' },
+                    { term: 'CSRF', definition: 'Cross-Site Request Forgery - Attack that tricks users into executing unwanted actions' },
+                    { term: 'CSF', definition: 'Cybersecurity Framework - NIST framework for managing cybersecurity risk' },
+                    { term: 'DDoS', definition: 'Distributed Denial of Service - Attack using multiple systems to overwhelm targets' },
+                    { term: 'DHCP', definition: 'Dynamic Host Configuration Protocol - Automatically assigns IP addresses' },
+                    { term: 'DLP', definition: 'Data Loss Prevention - Technology to prevent unauthorized data transfer' },
+                    { term: 'DMZ', definition: 'Demilitarized Zone - Network segment that isolates external services' },
+                    { term: 'DNS', definition: 'Domain Name System - Translates domain names to IP addresses' },
+                    { term: 'DRP', definition: 'Disaster Recovery Plan - Strategy for recovering from major incidents' },
+                    { term: 'EAP', definition: 'Extensible Authentication Protocol - Framework for network access authentication' },
+                    { term: 'EDR', definition: 'Endpoint Detection and Response - Security technology for endpoint monitoring' },
+                    { term: 'FDE', definition: 'Full Disk Encryption - Encrypts entire storage device' },
+                    { term: 'GDPR', definition: 'General Data Protection Regulation - EU privacy regulation' },
+                    { term: 'GPO', definition: 'Group Policy Object - Windows policy configuration tool' },
+                    { term: 'HIDS', definition: 'Host-based Intrusion Detection System - Monitors individual hosts for malicious activity' },
+                    { term: 'HIPAA', definition: 'Health Insurance Portability and Accountability Act - US healthcare privacy law' },
+                    { term: 'HMAC', definition: 'Hash-based Message Authentication Code - Method for verifying data integrity and authenticity' },
+                    { term: 'HSM', definition: 'Hardware Security Module - Dedicated cryptographic device' },
+                    { term: 'HTTP', definition: 'Hypertext Transfer Protocol - Web communication protocol' },
+                    { term: 'HTTPS', definition: 'HTTP Secure - Encrypted version of HTTP using TLS/SSL' },
+                    { term: 'IAM', definition: 'Identity and Access Management - Framework for managing digital identities' },
+                    { term: 'ICS', definition: 'Industrial Control System - Computer systems that control industrial processes' },
+                    { term: 'IDS', definition: 'Intrusion Detection System - Monitors network/system for malicious activity' },
+                    { term: 'IoT', definition: 'Internet of Things - Network of connected physical devices' },
+                    { term: 'IPS', definition: 'Intrusion Prevention System - Actively blocks detected threats' },
+                    { term: 'IR', definition: 'Incident Response - Process of handling security incidents' },
+                    { term: 'ISO', definition: 'International Organization for Standardization - Global standards body' },
+                    { term: 'LDAP', definition: 'Lightweight Directory Access Protocol - Protocol for accessing directory services' },
+                    { term: 'MAC', definition: 'Mandatory Access Control - Security model using labels and clearances' },
+                    { term: 'MFA', definition: 'Multi-Factor Authentication - Authentication using multiple verification methods' },
+                    { term: 'MITM', definition: 'Man-in-the-Middle - Attack intercepting communications between parties' },
+                    { term: 'MSP', definition: 'Managed Service Provider - Company providing IT services to other organizations' },
+                    { term: 'MTBF', definition: 'Mean Time Between Failures - Average time between system failures' },
+                    { term: 'MTTR', definition: 'Mean Time To Repair - Average time to repair failed systems' },
+                    { term: 'NAC', definition: 'Network Access Control - Security approach controlling device network access' },
+                    { term: 'NDA', definition: 'Non-Disclosure Agreement - Legal contract protecting confidential information' },
+                    { term: 'NIDS', definition: 'Network-based Intrusion Detection System - Monitors network traffic for threats' },
+                    { term: 'NIST', definition: 'National Institute of Standards and Technology - US standards organization' },
+                    { term: 'OAUTH', definition: 'Open Authorization - Standard for access delegation' },
+                    { term: 'OSINT', definition: 'Open Source Intelligence - Information gathering from public sources' },
+                    { term: 'OWASP', definition: 'Open Web Application Security Project - Organization focused on web security' },
+                    { term: 'PAM', definition: 'Privileged Access Management - Solution for managing privileged accounts' },
+                    { term: 'PCI DSS', definition: 'Payment Card Industry Data Security Standard - Security standard for card data' },
+                    { term: 'PFS', definition: 'Perfect Forward Secrecy - Property ensuring past sessions remain secure' },
+                    { term: 'PHI', definition: 'Protected Health Information - Individual health information under HIPAA' },
+                    { term: 'PII', definition: 'Personally Identifiable Information - Data that identifies individuals' },
+                    { term: 'PKI', definition: 'Public Key Infrastructure - Framework for managing digital certificates' },
+                    { term: 'PSK', definition: 'Pre-Shared Key - Cryptographic key shared between parties' },
+                    { term: 'RADIUS', definition: 'Remote Authentication Dial-In User Service - Network access authentication protocol' },
+                    { term: 'RBAC', definition: 'Role-Based Access Control - Access control based on user roles' },
+                    { term: 'RPO', definition: 'Recovery Point Objective - Maximum acceptable data loss timeframe' },
+                    { term: 'RTO', definition: 'Recovery Time Objective - Target time for service restoration' },
+                    { term: 'SAML', definition: 'Security Assertion Markup Language - Standard for exchanging authentication data' },
+                    { term: 'SCADA', definition: 'Supervisory Control and Data Acquisition - Industrial control system' },
+                    { term: 'SDK', definition: 'Software Development Kit - Tools for developing applications' },
+                    { term: 'SIEM', definition: 'Security Information and Event Management - Platform for security monitoring' },
+                    { term: 'SMTP', definition: 'Simple Mail Transfer Protocol - Email transmission protocol' },
+                    { term: 'SNMP', definition: 'Simple Network Management Protocol - Network device management protocol' },
+                    { term: 'SOAR', definition: 'Security Orchestration, Automation and Response - Platform for automated security operations' },
+                    { term: 'SOC', definition: 'Security Operations Center - Facility for monitoring security events' },
+                    { term: 'SOX', definition: 'Sarbanes-Oxley Act - US financial reporting regulation' },
+                    { term: 'SQL', definition: 'Structured Query Language - Database query language' },
+                    { term: 'SSH', definition: 'Secure Shell - Protocol for secure remote access' },
+                    { term: 'SSL', definition: 'Secure Sockets Layer - Predecessor to TLS for encryption' },
+                    { term: 'SSO', definition: 'Single Sign-On - Authentication allowing access to multiple systems' },
+                    { term: 'TACACS+', definition: 'Terminal Access Controller Access-Control System Plus - Authentication protocol' },
+                    { term: 'TLS', definition: 'Transport Layer Security - Cryptographic protocol for secure communication' },
+                    { term: 'TPM', definition: 'Trusted Platform Module - Hardware security chip' },
+                    { term: 'UAT', definition: 'User Acceptance Testing - Final testing phase before deployment' },
+                    { term: 'UPS', definition: 'Uninterruptible Power Supply - Backup power source' },
+                    { term: 'URL', definition: 'Uniform Resource Locator - Web address format' },
+                    { term: 'USB', definition: 'Universal Serial Bus - Standard interface for connecting devices' },
+                    { term: 'VLAN', definition: 'Virtual Local Area Network - Logical network segmentation' },
+                    { term: 'VPN', definition: 'Virtual Private Network - Secure connection over public networks' },
+                    { term: 'WAF', definition: 'Web Application Firewall - Firewall protecting web applications' },
+                    { term: 'WPA', definition: 'Wi-Fi Protected Access - Wireless security protocol' },
+                    { term: 'WPS', definition: 'Wi-Fi Protected Setup - Method for easy wireless network setup' },
+                    { term: 'XSS', definition: 'Cross-Site Scripting - Injection of malicious scripts into web applications' },
+                    { term: 'ZTNA', definition: 'Zero Trust Network Access - Security model requiring verification for all access' },
+                    // Additional Security Terms
+                    { term: 'ACL', definition: 'Access Control List - List specifying permissions for resources' },
+                    { term: 'ARP', definition: 'Address Resolution Protocol - Maps IP addresses to MAC addresses' },
+                    { term: 'BIOS', definition: 'Basic Input/Output System - Firmware for hardware initialization' },
+                    { term: 'BYOD', definition: 'Bring Your Own Device - Policy allowing personal devices for work' },
+                    { term: 'CVE', definition: 'Common Vulnerabilities and Exposures - Database of security vulnerabilities' },
+                    { term: 'CVSS', definition: 'Common Vulnerability Scoring System - Standard for vulnerability severity rating' },
+                    { term: 'DAC', definition: 'Discretionary Access Control - Access control at owner discretion' },
+                    { term: 'DES', definition: 'Data Encryption Standard - Legacy symmetric encryption algorithm' },
+                    { term: 'DKIM', definition: 'DomainKeys Identified Mail - Email authentication method' },
+                    { term: 'DMARC', definition: 'Domain-based Message Authentication, Reporting & Conformance - Email authentication protocol' },
+                    { term: 'FTP', definition: 'File Transfer Protocol - Standard for transferring files' },
+                    { term: 'FTPS', definition: 'File Transfer Protocol Secure - FTP with encryption' },
+                    { term: 'GRC', definition: 'Governance, Risk, and Compliance - Framework for organizational management' },
+                    { term: 'ICMP', definition: 'Internet Control Message Protocol - Network diagnostic protocol' },
+                    { term: 'IPSec', definition: 'Internet Protocol Security - Protocol suite for IP communications security' },
+                    { term: 'KPI', definition: 'Key Performance Indicator - Metric measuring performance' },
+                    { term: 'MD5', definition: 'Message Digest 5 - Legacy cryptographic hash function' },
+                    { term: 'NMAP', definition: 'Network Mapper - Network discovery and security auditing tool' },
+                    { term: 'NTP', definition: 'Network Time Protocol - Protocol for clock synchronization' },
+                    { term: 'OTP', definition: 'One-Time Password - Password valid for single login session' },
+                    { term: 'P2P', definition: 'Peer-to-Peer - Distributed network architecture' },
+                    { term: 'RFC', definition: 'Request for Comments - Internet technical specification documents' },
+                    { term: 'RSA', definition: 'Rivest-Shamir-Adleman - Public key cryptographic algorithm' },
+                    { term: 'SCAP', definition: 'Security Content Automation Protocol - Standard for vulnerability management' },
+                    { term: 'SFTP', definition: 'SSH File Transfer Protocol - Secure file transfer protocol' },
+                    { term: 'SHA', definition: 'Secure Hash Algorithm - Family of cryptographic hash functions' },
+                    { term: 'SLA', definition: 'Service Level Agreement - Contract defining service expectations' },
+                    { term: 'SPF', definition: 'Sender Policy Framework - Email authentication method' },
+                    { term: 'TCP', definition: 'Transmission Control Protocol - Reliable transport protocol' },
+                    { term: 'TFTP', definition: 'Trivial File Transfer Protocol - Simple file transfer protocol' },
+                    { term: 'UDP', definition: 'User Datagram Protocol - Connectionless transport protocol' },
+                    { term: 'UEFI', definition: 'Unified Extensible Firmware Interface - Modern replacement for BIOS' },
+                    { term: 'VM', definition: 'Virtual Machine - Software emulation of computer system' },
+                    { term: 'VDI', definition: 'Virtual Desktop Infrastructure - Technology for hosting desktop environments' },
+                    { term: 'WEP', definition: 'Wired Equivalent Privacy - Legacy wireless security protocol' },
+                    { term: 'XML', definition: 'eXtensible Markup Language - Markup language for data encoding' }
+                ];
+            }
+
+            bindEvents() {
+                // Quiz mode events
+                document.getElementById('startBtn').addEventListener('click', () => this.startQuiz());
+                document.getElementById('submitBtn').addEventListener('click', () => this.submitAnswer());
+                document.getElementById('hintBtn').addEventListener('click', () => this.showHint());
+                document.getElementById('nextBtn').addEventListener('click', () => this.nextQuestion());
+                document.getElementById('resetBtn').addEventListener('click', () => this.resetStats());
+
+                // Flashcard mode events
+                document.getElementById('startFlashcardsBtn').addEventListener('click', () => this.startFlashcards());
+                document.getElementById('flipBtn').addEventListener('click', () => this.flipCard());
+                document.getElementById('nextFlashcardBtn').addEventListener('click', () => this.nextFlashcard());
+                document.getElementById('shuffleBtn').addEventListener('click', () => this.shuffleFlashcards());
+
+                // Mode selection
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.switchMode(e.target.dataset.mode);
+                    });
+                });
+
+                // Domain selection
+                document.querySelectorAll('.domain-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.domain-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.selectedDomain = e.target.dataset.domain;
+                    });
+                });
+
+                // Flashcard click to flip
+                document.getElementById('flashcard').addEventListener('click', () => {
+                    if (this.currentMode === 'flashcards' && this.currentFlashcard) {
+                        this.flipCard();
+                    }
+                });
+            }
+
+            switchMode(mode) {
+                this.currentMode = mode;
+                
+                if (mode === 'quiz') {
+                    document.getElementById('quizMode').style.display = 'block';
+                    document.getElementById('flashcardMode').style.display = 'none';
+                    
+                    // Reset quiz state
+                    document.getElementById('questionText').textContent = 'Welcome to your Security+ 701 study session! Click "Start Quiz" to begin.';
+                    document.getElementById('optionsContainer').style.display = 'none';
+                    document.getElementById('pbqInput').style.display = 'none';
+                    document.getElementById('feedback').style.display = 'none';
+                    document.getElementById('hint').style.display = 'none';
+                    document.getElementById('startBtn').style.display = 'inline-block';
+                    document.getElementById('submitBtn').style.display = 'none';
+                    document.getElementById('hintBtn').style.display = 'none';
+                    document.getElementById('nextBtn').style.display = 'none';
+                } else if (mode === 'flashcards') {
+                    document.getElementById('quizMode').style.display = 'none';
+                    document.getElementById('flashcardMode').style.display = 'block';
+                    
+                    // Reset flashcard state
+                    document.getElementById('flashcardFront').textContent = 'Click "Start Flashcards" to begin!';
+                    document.getElementById('flashcard').classList.remove('flipped');
+                    document.getElementById('startFlashcardsBtn').style.display = 'inline-block';
+                    document.getElementById('flipBtn').style.display = 'none';
+                    document.getElementById('nextFlashcardBtn').style.display = 'none';
+                    document.getElementById('shuffleBtn').style.display = 'none';
+                }
+            }
+
+            // Flashcard Methods
+            startFlashcards() {
+                this.shuffledFlashcards = [...this.flashcards];
+                this.shuffleArray(this.shuffledFlashcards);
+                this.flashcardIndex = 0;
+                this.showCurrentFlashcard();
+                
+                document.getElementById('startFlashcardsBtn').style.display = 'none';
+                document.getElementById('flipBtn').style.display = 'inline-block';
+                document.getElementById('nextFlashcardBtn').style.display = 'inline-block';
+                document.getElementById('shuffleBtn').style.display = 'inline-block';
+            }
+
+            showCurrentFlashcard() {
+                if (this.flashcardIndex >= this.shuffledFlashcards.length) {
+                    this.flashcardIndex = 0;
+                }
+                
+                this.currentFlashcard = this.shuffledFlashcards[this.flashcardIndex];
+                const flashcard = document.getElementById('flashcard');
+                const front = document.getElementById('flashcardFront');
+                const term = document.getElementById('flashcardTerm');
+                const definition = document.getElementById('flashcardDefinition');
+                
+                front.textContent = this.currentFlashcard.term;
+                term.textContent = this.currentFlashcard.term;
+                definition.textContent = this.currentFlashcard.definition;
+                
+                flashcard.classList.remove('flipped');
+            }
+
+            flipCard() {
+                const flashcard = document.getElementById('flashcard');
+                flashcard.classList.toggle('flipped');
+            }
+
+            nextFlashcard() {
+                this.flashcardIndex++;
+                this.showCurrentFlashcard();
+            }
+
+            shuffleFlashcards() {
+                this.shuffleArray(this.shuffledFlashcards);
+                this.flashcardIndex = 0;
+                this.showCurrentFlashcard();
+            }
+
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            getFilteredQuestions() {
+                if (this.selectedDomain === 'all') {
+                    return this.questions;
+                }
+                return this.questions.filter(q => q.domain === this.selectedDomain);
+            }
+
+            startQuiz() {
+                const filteredQuestions = this.getFilteredQuestions();
+                if (filteredQuestions.length === 0) {
+                    alert('No questions available for selected domain.');
+                    return;
+                }
+
+                this.currentQuestion = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
+                this.displayQuestion();
+                
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('resetBtn').style.display = 'inline-block';
+            }
+
+            displayQuestion() {
+                const questionText = document.getElementById('questionText');
+                const questionType = document.getElementById('questionType');
+                const optionsContainer = document.getElementById('optionsContainer');
+                const pbqInput = document.getElementById('pbqInput');
+                const submitBtn = document.getElementById('submitBtn');
+                const hintBtn = document.getElementById('hintBtn');
+                const feedback = document.getElementById('feedback');
+                const hint = document.getElementById('hint');
+
+                questionText.textContent = this.currentQuestion.question;
+                questionType.textContent = this.currentQuestion.type === 'mc' ? 'Multiple Choice' : 'Performance-Based Question';
+                feedback.style.display = 'none';
+                hint.style.display = 'none';
+                this.selectedAnswer = null;
+                this.hintUsed = false;
+
+                // Reset hint button
+                hintBtn.textContent = '💡 Get Hint';
+                hintBtn.style.opacity = '1';
+                hintBtn.disabled = false;
+
+                if (this.currentQuestion.type === 'mc') {
+                    optionsContainer.style.display = 'grid';
+                    pbqInput.style.display = 'none';
+                    this.displayMultipleChoice();
+                } else {
+                    optionsContainer.style.display = 'none';
+                    pbqInput.style.display = 'block';
+                    pbqInput.value = '';
+                }
+
+                submitBtn.style.display = 'inline-block';
+                hintBtn.style.display = 'inline-block';
+                document.getElementById('nextBtn').style.display = 'none';
+            }
+
+            displayMultipleChoice() {
+                const container = document.getElementById('optionsContainer');
+                container.innerHTML = '';
+
+                this.currentQuestion.options.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    optionDiv.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                    optionDiv.addEventListener('click', () => this.selectOption(index, optionDiv));
+                    container.appendChild(optionDiv);
+                });
+            }
+
+            selectOption(index, element) {
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                element.classList.add('selected');
+                this.selectedAnswer = index;
+            }
+
+            submitAnswer() {
+                let isCorrect = false;
+                let userAnswer = '';
+
+                if (this.currentQuestion.type === 'mc') {
+                    if (this.selectedAnswer === null) {
+                        alert('Please select an answer.');
+                        return;
+                    }
+                    isCorrect = this.selectedAnswer === this.currentQuestion.correct;
+                    this.showMultipleChoiceResults(isCorrect);
+                } else {
+                    userAnswer = document.getElementById('pbqInput').value.trim();
+                    if (!userAnswer) {
+                        alert('Please enter an answer.');
+                        return;
+                    }
+                    // For PBQ, we'll consider it correct if it contains key concepts
+                    isCorrect = this.evaluatePBQ(userAnswer);
+                    this.showPBQResults(userAnswer);
+                }
+
+                this.updateStats(isCorrect);
+                document.getElementById('submitBtn').style.display = 'none';
+                document.getElementById('hintBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            }
+
+            showHint() {
+                if (this.hintUsed) {
+                    return;
+                }
+
+                const hint = document.getElementById('hint');
+                hint.innerHTML = `<h3>💡 Hint</h3><p>${this.currentQuestion.hint}</p>`;
+                hint.style.display = 'block';
+                this.hintUsed = true;
+                
+                // Disable the hint button after use
+                const hintBtn = document.getElementById('hintBtn');
+                hintBtn.textContent = '💡 Hint Used';
+                hintBtn.style.opacity = '0.6';
+                hintBtn.disabled = true;
+            }
+
+            evaluatePBQ(answer) {
+                // Simple keyword matching for demonstration
+                const keywords = this.currentQuestion.answer.toLowerCase().split(/\s+/);
+                const userWords = answer.toLowerCase().split(/\s+/);
+                let matches = 0;
+
+                keywords.forEach(keyword => {
+                    if (keyword.length > 3 && userWords.some(word => word.includes(keyword) || keyword.includes(word))) {
+                        matches++;
+                    }
+                });
+
+                return matches >= Math.min(3, keywords.length * 0.3);
+            }
+
+            showMultipleChoiceResults(isCorrect) {
+                const options = document.querySelectorAll('.option');
+                options.forEach((option, index) => {
+                    if (index === this.currentQuestion.correct) {
+                        option.classList.add('correct');
+                    } else if (index === this.selectedAnswer && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+
+                this.showFeedback(isCorrect);
+            }
+
+            showPBQResults(userAnswer) {
+                const isCorrect = this.evaluatePBQ(userAnswer);
+                this.showFeedback(isCorrect, userAnswer);
+            }
+
+            showFeedback(isCorrect, userAnswer = '') {
+                const feedback = document.getElementById('feedback');
+                const result = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+                
+                let feedbackHTML = `<h3>${result}</h3>`;
+                
+                if (this.currentQuestion.type === 'pbq' && userAnswer) {
+                    feedbackHTML += `<p><strong>Your answer:</strong> ${userAnswer}</p>`;
+                    feedbackHTML += `<p><strong>Sample answer:</strong> ${this.currentQuestion.answer}</p>`;
+                }
+                
+                feedbackHTML += `<p><strong>Explanation:</strong> ${this.currentQuestion.explanation}</p>`;
+                
+                feedback.innerHTML = feedbackHTML;
+                feedback.style.display = 'block';
+            }
+
+            nextQuestion() {
+                this.startQuiz();
+            }
+
+            updateStats(isCorrect = null) {
+                if (isCorrect !== null) {
+                    this.stats.total++;
+                    if (isCorrect) {
+                        this.stats.correct++;
+                    }
+                    this.stats.accuracy = this.stats.total > 0 ? Math.round((this.stats.correct / this.stats.total) * 100) : 0;
+                }
+
+                document.getElementById('totalQuestions').textContent = this.stats.total;
+                document.getElementById('correctAnswers').textContent = this.stats.correct;
+                document.getElementById('accuracy').textContent = `${this.stats.accuracy}%`;
+                
+                const progressFill = document.getElementById('progressFill');
+                progressFill.style.width = `${this.stats.accuracy}%`;
+            }
+
+            resetStats() {
+                this.stats = { total: 0, correct: 0, accuracy: 0 };
+                this.updateStats();
+                
+                document.getElementById('questionText').textContent = 'Statistics reset! Click "Start Quiz" to continue studying.';
+                document.getElementById('optionsContainer').style.display = 'none';
+                document.getElementById('pbqInput').style.display = 'none';
+                document.getElementById('feedback').style.display = 'none';
+                document.getElementById('hint').style.display = 'none';
+                document.getElementById('startBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('resetBtn').style.display = 'none';
+            }
+        }
+
+        // Initialize the bot when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SecurityPlusBot();
+        });
+    </script>
+</body>
+</html>
